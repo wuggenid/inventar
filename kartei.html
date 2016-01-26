@@ -1,0 +1,65 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <title>Inventur</title>
+    </head>
+    <body>
+        <div id="outerContainer" class="container well" style="text-align: center;">
+            <table id="karteien" align="center" style="float:left;">
+
+            </table>
+            <div style="float: right";>
+                <button data-dismiss="modal" class="btn btn-success">Hinzuf&uuml;gen</button>
+            </div>
+        </div>
+        <div class="modal fade" tabindex="-1" role="dialog">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Modal title</h4>
+              </div>
+              <div class="modal-body">
+                <p>One fine body&hellip;</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+              </div>
+            </div><!-- /.modal-content -->
+          </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+    </body>
+    <script language="JavaScript">
+        var table = document.getElementById("karteien");
+        
+        var karteien = JSON.parse(localStorage.getItem("karteien"));
+        if (karteien != null)
+        {
+            for (var i = 0;i<karteien.length;i++)
+            {
+                var row = table.insertRow(0);
+
+                var obj = row.insertCell(0);
+                obj.innerHTML = rooms[i]['obj'];
+
+                var edit = row.insertCell(0);
+                edit.innerHTML = "<button class=\"btn btn-danger\">L&ouml;schen</button>";
+
+                var del = row.insertCell(0);
+                del.innerHTML = "<button class=\"btn btn-danger\">L&ouml;schen</button>";
+            }
+        }
+        
+    </script>
+    <style type="text/css">
+        BUTTON
+        {
+         //   width: 100%;
+        }
+        #outerContainer
+        {
+            margin-top: 15em;
+        }
+    </style>
+</html>

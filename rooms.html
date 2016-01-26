@@ -1,0 +1,45 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <title>Inventur</title>
+    </head>
+    <body>
+        <div id="outerContainer" class="container well" style="text-align: center;">
+            <table id="rooms" align="center" style="float:left;">
+
+            </table>
+            <div style="float: right";>
+                <a href="addRoom.html"><button class="btn btn-success">Hinzuf&uuml;gen</button></a>
+            </div>
+        </div>
+    </body>
+    <script language="JavaScript">
+        var table = document.getElementById("rooms");
+        
+        var rooms = JSON.parse(localStorage.getItem("rooms"));
+        for (var i = 0;i<rooms.length;i++)
+        {
+            var row = table.insertRow(0);
+            
+            var obj = row.insertCell(0);
+            obj.innerHTML = rooms[i]['obj'];
+            
+            var edit = row.insertCell(0);
+            edit.innerHTML = "<button class=\"btn btn-danger\">L&ouml;schen</button>";
+            
+            var del = row.insertCell(0);
+            del.innerHTML = "<button class=\"btn btn-danger\">L&ouml;schen</button>";
+        }
+        
+    </script>
+    <style type="text/css">
+        BUTTON
+        {
+         //   width: 100%;
+        }
+        #outerContainer
+        {
+            margin-top: 15em;
+        }
+    </style>
+</html>
