@@ -1,65 +1,151 @@
 <html>
     <head>
         <link rel="stylesheet" href="css/bootstrap.min.css">
+        <script src="js/jquery-1.12.0.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
         <title>Inventur</title>
     </head>
     <body>
         <div id="outerContainer" class="container well" style="text-align: center;">
-            <table id="karteien" align="center" style="float:left;">
-
+            <a href="index.html" class="btn btn-danger" style="float: left;">Zur&uuml;ck</a>
+            <a href="#" data-toggle="modal" data-target="#newKarteiModal" class="btn btn-success" style="float: right;">Hinzuf&uuml;gen</a>
+            <br />
+            <br />
+            <table id="karteien" align="center" class="table-striped table-hover">
+                    <tr>
+                        <th>Sollbestand</th>
+                        <th>Beschreibung</th>
+                    </tr>
             </table>
-            <div style="float: right";>
-                <button data-dismiss="modal" class="btn btn-success">Hinzuf&uuml;gen</button>
+        </div>
+        <!-- New Kartei -->
+        <div id="newKarteiModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Neue Kartei erstellen</h4>
+                    </div>
+                    <div class="modal-body">
+                        <input id="soll_tbx" type="text" class="form-control" placeholder="Sollbestand" />
+                        <input id="beschr_tbx" type="text" class="form-control" placeholder="Beschreibung" />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Schliessen</button>
+                        <button type="button" class="btn btn-success" onclick="saveNewKartei()" data-dismiss="modal">Speichern</button>
+                    </div>
+                </div>
+
             </div>
         </div>
-        <div class="modal fade" tabindex="-1" role="dialog">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Modal title</h4>
-              </div>
-              <div class="modal-body">
-                <p>One fine body&hellip;</p>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-              </div>
-            </div><!-- /.modal-content -->
-          </div><!-- /.modal-dialog -->
-        </div><!-- /.modal -->
     </body>
     <script language="JavaScript">
         var table = document.getElementById("karteien");
         
-        var karteien = JSON.parse(localStorage.getItem("karteien"));
-        if (karteien != null)
+        loadTable();
+        
+        function loadTable()
         {
-            for (var i = 0;i<karteien.length;i++)
+            table.innerHTML = "<tr><th>Sollbestand</th><th>Beschreibung</th></tr>";
+            var karteien = JSON.parse(localStorage.getItem("karteien"));
+            if (karteien != null)
             {
-                var row = table.insertRow(0);
+                    for (var i = 0;i<karteien.length;i++)
+                    {
+                        if (!("deleted" in karteien[i]))
+                        {
+                            var row = table.insertRow(1);
 
-                var obj = row.insertCell(0);
-                obj.innerHTML = rooms[i]['obj'];
+                            var obj = row.insertCell(0);
+                            obj.innerHTML = karteien[i]['beschr'];    
 
-                var edit = row.insertCell(0);
-                edit.innerHTML = "<button class=\"btn btn-danger\">L&ouml;schen</button>";
+                            var obj = row.insertCell(0);
+                            obj.innerHTML = karteien[i]['soll'];
 
-                var del = row.insertCell(0);
-                del.innerHTML = "<button class=\"btn btn-danger\">L&ouml;schen</button>";
+                            var edit = row.insertCell(-1);
+                            edit.innerHTML = "<button data-id=\""+karteien[i]['id']+"\" onclick=\"editKartei(this)\" class=\"btn btn-warning low-padding\">Bearbeiten</button>";
+
+                            var del = row.insertCell(-1);
+                            del.innerHTML = "<button data-id=\""+karteien[i]['id']+"\" onclick=\"deleteKartei(this)\" class=\"btn btn-danger low-padding\">L&ouml;schen</button>";
+                        }
+                    }
             }
         }
         
+        function editKartei(e)
+        {
+            var karteien = JSON.parse(localStorage.getItem("karteien"));
+            
+            for (var i = 0;i<karteien.length;i++)
+            {
+                if (karteien[i]['id'] == e.getAttribute("data-id"))
+                {
+                    document.getElementById('soll_tbx').value;
+                    document.getElementById('beschr_tbx').value;
+                }
+            }
+        }
+        
+        function deleteKartei(e)
+        {
+            var karteien = JSON.parse(localStorage.getItem("karteien"));
+            
+            for (var i = 0;i<karteien.length;i++)
+            {
+                if (karteien[i]['id'] == e.getAttribute("data-id"))
+                {
+                    karteien[i]['deleted'] = true;
+                }
+            }
+            localStorage.setItem("karteien",JSON.stringify(karteien));
+            
+            location.reload();
+        }
+        
+        function saveNewKartei()
+        {
+            var karteien = JSON.parse(localStorage.getItem("karteien"));
+            
+            if (karteien == null)
+                karteien = new Array();
+            var newKartei = {};
+            newKartei['id'] = karteien.length;
+            newKartei['soll'] = document.getElementById('soll_tbx').value;
+            newKartei['beschr'] = document.getElementById('beschr_tbx').value;
+            karteien.push(newKartei);
+            
+            localStorage.setItem("karteien",JSON.stringify(karteien));
+            location.reload();
+        }
     </script>
     <style type="text/css">
+        TABLE
+        {
+            font-family: OpenSans;
+        }
         BUTTON
         {
          //   width: 100%;
         }
+        TABLE TR TD
+        {
+            padding-right: 5em;
+        }
         #outerContainer
         {
             margin-top: 15em;
+        }
+        .low-padding
+        {
+            padding-right: 1em;
+        }
+        @font-face {
+      font-family: OpenSans;
+      src: local("ttf\\OpenSans-Light.ttf"),
+           url("ttf\\OpenSans-Light.ttf");
+      font-weight: light;
         }
     </style>
 </html>
