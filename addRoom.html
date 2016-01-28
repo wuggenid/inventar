@@ -53,18 +53,55 @@
         else
             newRoom['id'] = 0;
         
+        
         function newItem()
         {
+            var itemId = JSON.parse(localStorage.getItem('items'));
+            if (itemId == null)
+                itemId = new Array();
+            itemId = itemId.length+1;
+            
             var itemTable = document.getElementById('items');
             var row = itemTable.insertRow(1);
             
-            var cell3 = row.insertCell(0);
-            cell3.innerHTML = "<button class=\"btn btn-danger\" style=\"float:left;\" onclick=\"deleteItem\">L&ouml;schen</button>";
-            cell3.style.paddingRight = 0;
+            var karteien = JSON.parse(localStorage.getItem("karteien"));
+            
             var cell = row.insertCell(-1);
-            cell.innerHTML = "<input type=\"text\" class=\"item form-control\" />";
+            
+            for (var i = 0;i<karteien.length;i++)
+            {
+                if (!("deleted" in karteien[i]))
+                    cell.innerHTML += "<option data-id=\""+karteien[i]['id']+"\">"+karteien[i]['beschr']+"</option>";
+            }
+            cell.innerHTML = "<select id=\"itemSelect\" class=\"item form-control\">" + cell.innerHTML;
+            cell.innerHTML += "</select>";
+            
+            
+            var cell3 = row.insertCell(0);
+            cell3.innerHTML = "<button data-id=\"" + itemId + "\"class=\"btn btn-danger item\" style=\"float:left;\" onclick=\"deleteItem(this)\">L&ouml;schen</button>";
+            cell3.style.paddingRight = 0;
+            
+            
+            
             var cell2 = row.insertCell(-1);
             cell2.innerHTML = "<input type=\"text\" class=\"count form-control\" style=\"width:30%; padding-right: 0;\" />";
+            
+            var items = JSON.parse(localStorage.getItem('items'));
+            if (items == null)
+                items = new Array();
+            var newItem = {};
+            newItem['id'] = itemId;
+            var itemSelect = document.getElementById("itemSelect");
+            newItem['k_id']  = itemSelect.options[itemSelect.selectedIndex].getAttribute("data-id");
+            console.log(newItem);
+            items.push()
+        }
+        function deleteItem(e)
+        {
+            for (var i = 0;i<items.length;i++)
+            {
+                
+            }
         }
         
     </script>
