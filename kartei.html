@@ -40,6 +40,28 @@
 
             </div>
         </div>
+        <!-- Edit Kartei -->
+        <div id="editKarteiModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Kartei bearbeiten</h4>
+                    </div>
+                    <div class="modal-body">
+                        <input id="edit_soll_tbx" type="text" class="form-control" placeholder="Sollbestand" />
+                        <input id="edit_beschr_tbx" type="text" class="form-control" placeholder="Beschreibung" />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Schliessen</button>
+                        <button id="edit_saveButton" type="button" class="btn btn-success" onclick="editSaveKartei(this)" data-dismiss="modal">Speichern</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
     </body>
     <script language="JavaScript">
         var table = document.getElementById("karteien");
@@ -76,16 +98,40 @@
         
         function editKartei(e)
         {
+            
             var karteien = JSON.parse(localStorage.getItem("karteien"));
             
             for (var i = 0;i<karteien.length;i++)
             {
                 if (karteien[i]['id'] == e.getAttribute("data-id"))
                 {
-                    document.getElementById('soll_tbx').value;
-                    document.getElementById('beschr_tbx').value;
+                    var soll = karteien[i]['soll'];
+                    var beschr = karteien[i]['beschr'];
+                    
+                    document.getElementById('edit_soll_tbx').value = soll;
+                    document.getElementById('edit_beschr_tbx').value = beschr;
+                    
+                    document.getElementById('edit_saveButton').setAttribute("data-id",i);
+                    
+                    $('#editKarteiModal').modal();
                 }
             }
+        }
+        
+        function editSaveKartei(e)
+        {
+            var karteien = JSON.parse(localStorage.getItem("karteien"));
+            
+            for (var i = 0;i<karteien.length;i++)
+            {
+                if (karteien[i]['id'] == e.getAttribute("data-id"))
+                {
+                    karteien[i]['soll'] = document.getElementById('edit_soll_tbx').value;
+                    karteien[i]['beschr'] = document.getElementById('edit_beschr_tbx').value;
+                }
+            }
+            localStorage.setItem("karteien",JSON.stringify(karteien));
+            location.reload();
         }
         
         function deleteKartei(e)
