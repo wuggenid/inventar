@@ -5,7 +5,7 @@
     </head>
     <body>
         <div id="outerContainer" class="container well" style="text-align: center;">
-            <table align="center" style="float:left;">
+            <table id="rooms" align="center" style="float:left;">
                 <tr>
                     <td>Objekt</td>
                     <td>Stiege/ZiNo</td>
@@ -32,7 +32,7 @@
                 </tr>
             </table>
             <div style="float: right";>
-                <button class="btn btn-success">Speichern</button>
+                <button onclick="saveItem()" class="btn btn-success">Speichern</button>
             </div>
             
         </div>
@@ -40,7 +40,8 @@
     <script language="JavaScript">
         var table = document.getElementById("rooms");
         
-        var rooms = JSON.parse(localStorage.getItem("rooms"));
+        
+        var rooms = JSON.parse(localStorage.getItem("rooms") || null);
         
         var newRoom = new Array();
         
@@ -53,13 +54,13 @@
         else
             newRoom['id'] = 0;
         
+        var itemId = 0;
+        
+        console.log(JSON.parse(localStorage.getItem('items')));
         
         function newItem()
-        {
-            var itemId = JSON.parse(localStorage.getItem('items'));
-            if (itemId == null)
-                itemId = new Array();
-            itemId = itemId.length+1;
+        {   
+            itemId++;
             
             var itemTable = document.getElementById('items');
             var row = itemTable.insertRow(1);
@@ -89,19 +90,48 @@
             var items = JSON.parse(localStorage.getItem('items'));
             if (items == null)
                 items = new Array();
-            var newItem = {};
-            newItem['id'] = itemId;
-            var itemSelect = document.getElementById("itemSelect");
-            newItem['k_id']  = itemSelect.options[itemSelect.selectedIndex].getAttribute("data-id");
-            console.log(newItem);
-            items.push()
         }
         function deleteItem(e)
         {
-            for (var i = 0;i<items.length;i++)
+            var id = e.getAttribute("data-id");
+            
+            table = document.getElementById("items");
+            
+            for (var i = 1;i<table.children[0].children.length;i++)
             {
-                
+                if (table.children[0].children[i].children[0].firstElementChild.getAttribute("data-id") == id)
+                    table.children[0].removeChild(table.children[0].children[i]);
             }
+        }
+        
+        function saveItem()
+        {
+            table = document.getElementById("items");
+            
+            var items = new Array();
+            
+            for (var i = 1;i<table.children[0].children.length;i++)
+            {
+                var itemId = JSON.parse(localStorage.getItem('items'));
+                if (itemId == null)
+                    itemId = new Array();
+                itemId = itemId.length+1;
+
+                var newItem = {};
+                newItem['id'] = itemId;
+                var itemSelect = document.getElementById("itemSelect");
+                
+                var length = 0;
+                if (JSON.parse(localStorage.getItem("rooms") || null) == null)
+                    length = 0;
+                else
+                    length = JSON.parse(localStorage.getItem("rooms")).length;
+                newItem['r_id'] = length;
+                newItem['k_id']  = itemSelect.options[itemSelect.selectedIndex].getAttribute("data-id");
+                newItem['count'] = table.children[0].children[i].children[2].firstChild.value;
+                items.push(newItem);
+            }
+            localStorage.setItem("items",JSON.stringify(items));
         }
         
     </script>
