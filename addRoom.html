@@ -48,15 +48,11 @@
         if (rooms!=null)
         {
             newRoom['id'] = rooms.length;
-
-            console.log(rooms.length);
         }
         else
             newRoom['id'] = 0;
         
         var itemId = 0;
-        
-        console.log(JSON.parse(localStorage.getItem('items')));
         
         function newItem()
         {   
@@ -81,8 +77,6 @@
             var cell3 = row.insertCell(0);
             cell3.innerHTML = "<button data-id=\"" + itemId + "\"class=\"btn btn-danger item\" style=\"float:left;\" onclick=\"deleteItem(this)\">L&ouml;schen</button>";
             cell3.style.paddingRight = 0;
-            
-            
             
             var cell2 = row.insertCell(-1);
             cell2.innerHTML = "<input type=\"text\" class=\"count form-control\" style=\"width:30%; padding-right: 0;\" />";
@@ -132,6 +126,33 @@
                 items.push(newItem);
             }
             localStorage.setItem("items",JSON.stringify(items));
+            
+            rooms = JSON.parse(localStorage.getItem("rooms") || null);
+            
+            if (rooms == null)
+                rooms = new Array();
+            var room = {};
+            
+            rooms = JSON.parse(localStorage.getItem("rooms") || null);
+
+            if (rooms!=null)
+            {
+                room['id'] = rooms.length;
+            }
+            else
+            {
+                room['id'] = 0;
+                rooms = new Array();
+            }
+            
+            room['obj'] = document.getElementById('tbxObj').value;
+            room['zino'] = document.getElementById('tbxZiNo').value;
+            room['descr'] = document.getElementById('tbxDes').value;
+            
+            rooms.push(room)
+            localStorage.setItem('rooms',JSON.stringify(rooms));
+            
+            window.location.href = "rooms.html";
         }
         
     </script>

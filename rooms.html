@@ -5,12 +5,17 @@
     </head>
     <body>
         <div id="outerContainer" class="container well" style="text-align: center;">
-            <table id="rooms" align="center" style="float:left;">
-
-            </table>
+            <a href="index.html" class="btn btn-danger" style="float: left;">Zur&uuml;ck</a>
             <div style="float: right";>
                 <a href="addRoom.html"><button class="btn btn-success">Hinzuf&uuml;gen</button></a>
             </div>
+            <table id="rooms" align="center" class="table-striped table-hover">
+                <tr>
+                    <th>Objekt</th>
+                    <th>ZiNo</th>
+                    <th>Beschreibung</th>
+                </tr>
+            </table>
         </div>
     </body>
     <script language="JavaScript">
@@ -19,20 +24,30 @@
         var rooms = JSON.parse(localStorage.getItem("rooms"));
         for (var i = 0;i<rooms.length;i++)
         {
-            var row = table.insertRow(0);
+            var row = table.insertRow(1);
             
             var obj = row.insertCell(0);
             obj.innerHTML = rooms[i]['obj'];
             
-            var edit = row.insertCell(0);
-            edit.innerHTML = "<button class=\"btn btn-danger\">L&ouml;schen</button>";
+            var zino = row.insertCell(-1);
+            zino.innerHTML = rooms[i]['zino'];
             
-            var del = row.insertCell(0);
+            var descr = row.insertCell(-1);
+            descr.innerHTML = rooms[i]['descr'];
+            
+            var edit = row.insertCell(-1);
+            edit.innerHTML = "<button class=\"btn btn-warning\">Bearbeiten</button>";
+            
+            var del = row.insertCell(-1);
             del.innerHTML = "<button class=\"btn btn-danger\">L&ouml;schen</button>";
         }
         
     </script>
     <style type="text/css">
+        TABLE TR TD
+        {
+            padding-right: 5em;
+        }
         BUTTON
         {
          //   width: 100%;
@@ -40,6 +55,16 @@
         #outerContainer
         {
             margin-top: 15em;
+        }
+        @font-face {
+      font-family: OpenSans;
+      src: local("ttf\\OpenSans-Light.ttf"),
+           url("ttf\\OpenSans-Light.ttf");
+      font-weight: light;
+        }
+        BODY
+        {
+            font-family: OpenSans;
         }
     </style>
 </html>
