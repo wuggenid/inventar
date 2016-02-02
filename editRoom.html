@@ -15,9 +15,9 @@
                     <td>Beschreibung</td>
                 </tr>
                 <tr>
-                    <td><input id="tbxObj" type="text" placeholder="Obj" style="width: 3em;"/></td>
-                    <td><input id="tbxZiNo" type="text" placeholder="ZiNo" style="width: 7em;"/></td>
-                    <td><input id="tbxDes" type="text" placeholder="Beschr." /></td>
+                    <td><input id="tbxObj" type="text" class="form-control" placeholder="Obj" style="width: 3em;"/></td>
+                    <td><input id="tbxZiNo" type="text" class="form-control" placeholder="ZiNo" style="width: 7em;"/></td>
+                    <td><input id="tbxDes" type="text" class="form-control" placeholder="Beschr." /></td>
                 </tr>   
             </table>
             <br />
@@ -43,7 +43,6 @@
     <script language="JavaScript">
         var table = document.getElementById("rooms");
         
-        
         var rooms = JSON.parse(localStorage.getItem("rooms") || null);
         
         var newRoom = new Array();
@@ -56,6 +55,20 @@
             newRoom['id'] = 0;
         
         var itemId = 0;
+        
+        var editRoom = JSON.parse(localStorage.getItem("editRoom"));
+        
+        document.getElementById("tbxObj").value = editRoom['obj'];
+        document.getElementById("tbxZiNo").value = editRoom['zino'];
+        document.getElementById("tbxDes").value = editRoom['descr'];
+        
+        var items = JSON.parse(localStorage.getItem("items"));
+        
+        for (var i = 0;i<items.length;i++)
+        {
+            if (item[i]['r_id'] == editRoom['id'])
+                console.log(item[i]['id'])
+        }
         
         function newItem()
         {   
